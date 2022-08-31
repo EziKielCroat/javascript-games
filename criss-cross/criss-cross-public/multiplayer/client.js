@@ -59,6 +59,10 @@ function sendServer(type, additional) {
     gameLogic(player);
   })
 
+  socket.on("error", function(msg) {
+    errorHandler(msg);
+  })
+
   if (type == "formMake") {
 
     document.getElementById("wait").style.display = "block";
@@ -88,3 +92,12 @@ function sendServer(type, additional) {
   }
 }
 
+function errorHandler(error) {
+  if(error == "PW1") {
+    alert("Room or password values are incorrect1");
+    document.getElementById("room-info").style.display = "block";
+  } else if(error = "PW2") {
+    alert("Room or password values are incorrect2");
+    document.getElementById("room-info").style.display = "block";
+  }
+}
