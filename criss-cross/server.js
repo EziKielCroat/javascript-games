@@ -47,6 +47,7 @@ server.listen(3000, "192.168.1.11", () => {
 // Rooms should be a array containing subarrays in which are actual room details. In each array should be stored username1 and 2, userRoom, userPass and socketId1 and 2
 
 let rooms = [];
+let full_rooms = [];
 
 function register_room(msg, socket) {
 
@@ -72,20 +73,19 @@ function login_room(msg, socket) {
    let userRoom = msg[1];
    let userPass = msg[2];
    let socketId2 = socket.id;
-
-   // TODO: Error handling, limit 2 connections per room, listen for disconnection while in room(client side)
+   // Error handling is too weird on client side just gonna leave that be
+   // TODO:limit 2 connections per room, listen for disconnection while in room(client side)
    for (let i = 0; i < rooms.length; i++) {
       if(rooms[i].userRoom == userRoom) {
          if(rooms[i].userPass == userPass) {
             rooms[i].userName2 = userName2;
             rooms[i].socketId2 = socketId2;
             socket.join(rooms[i].userRoom);
+            removeRoom(rooms[i], socket);
             data = rooms[i];
+
             io.to(rooms[i].socketId1).emit("start_game", data);
             io.to(rooms[i].socketId2).emit("start_game");
-         } else {
-            // error handling here, return to client event(error), in message just say room or password are wrong.
-            console.log("pass wrong");
          }
       }
    }
@@ -94,14 +94,10 @@ function login_room(msg, socket) {
 let i = 0;
 
 function start_game() {
-   console.log("start_game");
-   //let obj = data;
-  // console.log(obj);
    let player1 = data.socketId1
    let player2 = data.socketId2
-   console.log("player1: ", player1, "player2: ", player2);
 
-   // Game logic
+   console.log("player1: ", player1, "player2: ", player2);
 
    if(i % 2 == 0) {
       io.to(player1).emit("turnO");
@@ -114,20 +110,20 @@ function start_game() {
    }
 }
 
-function gameMove(player, place, socket) {
-   console.log("entry paramaters", player, place);
-   let obj = data;
-   // on move recieved, iniciate field in obj(append 2d array.) and check if the field is taken.
-for (let i = 0; i < obj.area.length; i++) {
-   if(place == obj.area[i]) {
-      obj.area[i] = player;
-      sendMove(player, place, socket);
-      return;
-   } else {
-      console.log("cannot find move");
-   }
-}
 
+// GameMove and start_game I believe are the functions that for some reason don't want to work with 2nd client X.
+
+function gameMove(player, place, socket) {
+   let obj = data;
+   for (let i = 0; i < obj.area.length; i++) {
+      if(place == obj.area[i]) {
+         obj.area[i] = player;
+         sendMove(player, place, socket);
+         return;
+      } else {
+         console.log("cannot find move");
+      }
+   }  
 }
 
 function sendMove(player, place, socket) {
@@ -135,4 +131,8 @@ function sendMove(player, place, socket) {
    socket.emit("moveApproved", data);
    i = i + 1;
    start_game();
+}
+
+function removeRoom(obj, socket) {
+   rooms.filter((function(el) { return obj.socketId1 != socket.id; }))
 }
