@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/multi.css">
+    <title>Multi-play</title>
+</head>
+<body>
+    <div class="container" id="container">
+        <div id="go-back">
+            <a href="../index.html">Go back?</a>
+        </div>
+        <h2>Tic-Tac-Toe with a friend!</h2>
+        <p id="wait"> Waiting on second player...</p>
+        <div id="room-info">
+            <form action="javascript:sendServer('formMake');">
+                <label for="fname">Your name:</label>
+                <input type="text" id="name" name="name"><br><br>
+                <label for="lname">Your room name:</label>
+                <input type="text" id="room" name="room"><br><br>
+                <label for="lname">Your room password:</label>
+                <input type="text" id="pass" name="pass"><br><br>
+                <input type="submit" value="Submit">
+              </form> 
+        </div>
+        
+        <div id="room-join">
+            <form action="javascript:sendServer('formJoin');">
+                <label for="fname">Your name:</label>
+                <input type="text" id="nameJoin" name="name"><br><br>
+                <label for="lname">The room name:</label>
+                <input type="text" id="roomJoin" name="room"><br><br>
+                <label for="lname">The room password:</label>
+                <input type="text" id="passJoin" name="pass"><br><br>
+                <input type="submit" value="Submit">
+              </form> 
+        </div>
+
+        <div id="buttons">
+            <button id="request">Make a game?</button>
+            <button id="join">Join a game?</button>
+        </div>
+
+        <script src="socket.io.js"></script>
+        <script src="client.js" defer></script>
+    </div>
+    <div class="container2" id="container2">
+        <link rel="stylesheet" href="../css/area.css">
+        <div id="go-back">
+            <a href="../index.html">Go back?</a>
+        </div>
+        <h2>Tic-Tac-Toe with a friend!</h2>
+        <h3 id="pobjednik"></h3>
+        <div class="play-area">
+            <div id="block_0" class="block"></div>
+            <div id="block_1" class="block"></div>
+            <div id="block_2" class="block"></div>
+            <div id="block_3" class="block"></div>
+            <div id="block_4" class="block"></div>
+            <div id="block_5" class="block"></div>
+            <div id="block_6" class="block"></div>
+            <div id="block_7" class="block"></div>
+            <div id="block_8" class="block"></div>
+        </div>
+        <script src="client.js" defer></script>
+    </div>
+</body>
+</html>
